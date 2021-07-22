@@ -14,10 +14,11 @@ interface Produto {
 interface DetalhesProdutoProps {
     produto: Produto;
     excluir: () => void;
+    iniciarEdicao: () => void;
 }
 
 function DetalhesProdutoComponent (props: DetalhesProdutoProps) {
-    const { produto, excluir } = props;
+    const { produto, excluir, iniciarEdicao } = props;
 
     return (
         <S.DetailsContainer>
@@ -32,7 +33,7 @@ function DetalhesProdutoComponent (props: DetalhesProdutoProps) {
                 <p>Preço: ${produto.preco}</p>
             </S.ProductDetailBox>
             <S.ButtonGroup>
-                <S.ButtonUpdate>Editar</S.ButtonUpdate>
+                <S.ButtonUpdate onClick={iniciarEdicao}>Editar</S.ButtonUpdate>
                 <S.ButtonDelete onClick={excluir}>Excluir</S.ButtonDelete>
             </S.ButtonGroup>
         </S.DetailsContainer>

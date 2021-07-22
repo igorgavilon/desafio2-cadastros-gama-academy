@@ -3,6 +3,7 @@ import * as S from './styled';
 
 import ListagemComponent from '../../components/ListagemComponent/ListagemComponent';
 import DetalhesProdutoComponent from '../../components/DetalheProdutoBox/DetalhesProdutoComponent';
+import FormProdutoComponent from '../../components/FormDadosProduto/FormProdutoComponent';
 
 interface Produto {
     codigo: string;
@@ -66,6 +67,7 @@ function ListaDeProdutos() {
     
     const [produtos, setProdutos] = useState(produtosArray);
     const [produtoMostrarDetalhe, setProdutoMostrarDetalhe] = useState(produtos[0]);
+    const [modoEdicao, setModoEdicao] = useState(false);
     
     const atualizarDetalhesBox = (codigo: string) => {
         const produtoEscolhido: Produto = produtos.find((produto) => produto.codigo === codigo)!;
@@ -76,19 +78,49 @@ function ListaDeProdutos() {
         const index: number = produtos.indexOf(produtoMostrarDetalhe)
         const arrayProdutosRestantes: Produto[] = produtos.filter((produto) => produto.codigo !== produtoMostrarDetalhe.codigo)
         setProdutos(arrayProdutosRestantes)
+        //produtos.slice(index, 1)
+        setProdutoMostrarDetalhe(arrayProdutosRestantes[0])
+    }
+
+    const editarProduto = () => {
+        setModoEdicao(true)
+    }
+
+
+    const salvarEdicao = (produtoEditado: Produto) => {
+        const index: number = produtos.indexOf(produtoMostrarDetalhe)
+        //const produtosEditado: Produto[] = 
+        produtos.splice(index, 1, produtoEditado)
+        //setProdutos(produtosEditado)
+        setProdutoMostrarDetalhe(produtoEditado)
+        sairModoEdicao();
+    }
+
+    const sairModoEdicao = () => {
+        setModoEdicao(false)
     }
 
     return (
         <>
             <S.Title>Sistema de Inventário Produtos</S.Title>
             <S.MainContainer>
-                <ListagemComponent 
+                { modoEdicao ? 
+                   <FormProdutoComponent 
+                   sairEdicao={sairModoEdicao}
+                   produtoEditar={produtoMostrarDetalhe}
+                   salvarEdicao={salvarEdicao}/> 
+                    
+                  :  <ListagemComponent 
                     produtosList={produtos} 
                     atualizar={atualizarDetalhesBox} />
+                }
+                
                 <DetalhesProdutoComponent 
                     produto={produtoMostrarDetalhe} 
-                    excluir={removerProduto}/>
+                    excluir={removerProduto} iniciarEdicao={editarProduto}/>
             </S.MainContainer>
+
+
         </>
     )
 
