@@ -84,7 +84,6 @@ function ListaDeProdutos() {
     }
 
     const salvarCriacao = (produto: Produto) => {
-        //const produtosRedimensionada: Produto[] = [produtos, produto]
         produtos.push(produto)
         setProdutoMostrarDetalhe(produtos[0])
         sairModoCriacao()
