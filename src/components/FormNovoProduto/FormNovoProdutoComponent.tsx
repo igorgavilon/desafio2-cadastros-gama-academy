@@ -12,14 +12,24 @@ interface Produto {
 }
 
 interface FormProdutoProps {
-    sairEdicao: () => void;
-    salvarEdicao: (produto: Produto) => void;
+    sairCriacao: () => void;
+    salvarCriacao: (produto: Produto) => void;
     produtoEditar: Produto;
 }
 
-function FormProdutoComponent(props: FormProdutoProps) {
-    const { sairEdicao, salvarEdicao, produtoEditar } = props;
-    const [produto, setProduto] = useState(produtoEditar);
+function FormNovoProdutoComponent(props: FormProdutoProps) {
+    const produtoModelo: Produto = {
+        codigo: '',
+        nome: '',
+        imagem: 'produto.png',
+        descricao: '',
+        categoria: '',
+        estoque: 0,
+        preco: 0
+    }
+    
+    const { sairCriacao, salvarCriacao, produtoEditar } = props;
+    const [produto, setProduto] = useState(produtoModelo);
     
     const edit = (e: string, propriedade: string)  => {
         setProduto((prevState) => ({
@@ -30,14 +40,14 @@ function FormProdutoComponent(props: FormProdutoProps) {
     }
 
     const salvar = () => {
-        salvarEdicao(produto)
+        salvarCriacao(produto)
     }
 
 
     return (
         <S.FormContainer>
             <S.Label>Código:</S.Label>
-            <S.Input placeholder='Código' value={produtoEditar.codigo} disabled={true} /><br/>
+            <S.Input placeholder='Código' value={produto.codigo} onChange={e => edit(e.target.value, 'codigo')}/><br/>
             <S.Label>Nome:</S.Label>
             <S.Input placeholder='Nome' value={produto.nome} onChange={e => edit(e.target.value, 'nome')}/><br/>
             <S.Label>Descrição: </S.Label>
@@ -49,11 +59,11 @@ function FormProdutoComponent(props: FormProdutoProps) {
             <S.Label>Preço:   </S.Label>
             <S.Input type='number' defaultValue={0}  value={produto.preco} onChange={e => edit(e.target.value, 'preco')}/><br/>
             <S.ButtonGroup>
-                <S.ButtonSair onClick={sairEdicao}>Sair</S.ButtonSair>
+                <S.ButtonSair onClick={sairCriacao}>Sair</S.ButtonSair>
                 <S.ButtonSalvar onClick={salvar}>Salvar</S.ButtonSalvar>
             </S.ButtonGroup>
         </S.FormContainer>
     )
 }
 
-export default FormProdutoComponent;
+export default FormNovoProdutoComponent;

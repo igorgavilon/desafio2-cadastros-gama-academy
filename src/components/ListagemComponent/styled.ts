@@ -34,3 +34,4 @@ export const ItemCardImage = styled.div`
 export const ItemCardName = styled.div`
     font-weight: bold;
 `;
+

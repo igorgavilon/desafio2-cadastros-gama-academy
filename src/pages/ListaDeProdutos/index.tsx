@@ -4,6 +4,7 @@ import * as S from './styled';
 import ListagemComponent from '../../components/ListagemComponent/ListagemComponent';
 import DetalhesProdutoComponent from '../../components/DetalheProdutoBox/DetalhesProdutoComponent';
 import FormProdutoComponent from '../../components/FormDadosProduto/FormProdutoComponent';
+import FormNovoProdutoComponent from '../../components/FormNovoProduto/FormNovoProdutoComponent';
 
 interface Produto {
     codigo: string;
@@ -68,36 +69,58 @@ function ListaDeProdutos() {
     const [produtos, setProdutos] = useState(produtosArray);
     const [produtoMostrarDetalhe, setProdutoMostrarDetalhe] = useState(produtos[0]);
     const [modoEdicao, setModoEdicao] = useState(false);
+    const [modoCriacao, setModoCriacao] = useState(false);
     
     const atualizarDetalhesBox = (codigo: string) => {
-        const produtoEscolhido: Produto = produtos.find((produto) => produto.codigo === codigo)!;
-        setProdutoMostrarDetalhe(produtoEscolhido)
+        if(!modoEdicao) {
+            const produtoEscolhido: Produto = produtos.find((produto) => produto.codigo === codigo)!;
+            setProdutoMostrarDetalhe(produtoEscolhido)
+        }
+        
+    }
+
+    const adicionarProduto = () => {
+        setModoCriacao(true)
+    }
+
+    const salvarCriacao = (produto: Produto) => {
+        //const produtosRedimensionada: Produto[] = [produtos, produto]
+        produtos.push(produto)
+        setProdutoMostrarDetalhe(produtos[0])
+        sairModoCriacao()
+
     }
 
     const removerProduto = () => {
-        const index: number = produtos.indexOf(produtoMostrarDetalhe)
-        const arrayProdutosRestantes: Produto[] = produtos.filter((produto) => produto.codigo !== produtoMostrarDetalhe.codigo)
-        setProdutos(arrayProdutosRestantes)
-        //produtos.slice(index, 1)
-        setProdutoMostrarDetalhe(arrayProdutosRestantes[0])
+        if (!modoEdicao && produtos.length !== 0) {
+            const index: number = produtos.indexOf(produtoMostrarDetalhe)
+            const arrayProdutosRestantes: Produto[] = produtos.filter((produto) => produto.codigo !== produtoMostrarDetalhe.codigo)
+            setProdutos(arrayProdutosRestantes)
+            setProdutoMostrarDetalhe(arrayProdutosRestantes[0])
+        }
+        
     }
 
     const editarProduto = () => {
-        setModoEdicao(true)
+        if (produtos.length !== 0) {
+            setModoEdicao(true)
+        }
     }
 
 
     const salvarEdicao = (produtoEditado: Produto) => {
         const index: number = produtos.indexOf(produtoMostrarDetalhe)
-        //const produtosEditado: Produto[] = 
         produtos.splice(index, 1, produtoEditado)
-        //setProdutos(produtosEditado)
         setProdutoMostrarDetalhe(produtoEditado)
         sairModoEdicao();
     }
 
     const sairModoEdicao = () => {
         setModoEdicao(false)
+    }
+
+    const sairModoCriacao = () => {
+        setModoCriacao(false)
     }
 
     return (
@@ -109,17 +132,25 @@ function ListaDeProdutos() {
                    sairEdicao={sairModoEdicao}
                    produtoEditar={produtoMostrarDetalhe}
                    salvarEdicao={salvarEdicao}/> 
+                   
+                   : modoCriacao ?
+                   <FormNovoProdutoComponent 
+                   sairCriacao={sairModoCriacao}
+                   produtoEditar={produtoMostrarDetalhe}
+                   salvarCriacao={salvarCriacao}/> 
                     
-                  :  <ListagemComponent 
+                  :  <><ListagemComponent 
                     produtosList={produtos} 
                     atualizar={atualizarDetalhesBox} />
+                    <S.ButtonAdicionar onClick={adicionarProduto}>Novo</S.ButtonAdicionar></>
                 }
                 
                 <DetalhesProdutoComponent 
                     produto={produtoMostrarDetalhe} 
                     excluir={removerProduto} iniciarEdicao={editarProduto}/>
-            </S.MainContainer>
 
+            </S.MainContainer>
+            
 
         </>
     )

@@ -23,14 +23,23 @@ function DetalhesProdutoComponent (props: DetalhesProdutoProps) {
     return (
         <S.DetailsContainer>
             <S.ProductDetailBox>
-                <img src={require(`../../assets/${produto.imagem}`).default} 
+                { produto ? ( <>
+                    <img src={require(`../../assets/${produto.imagem}`).default} 
                     width={90} height={90} alt="logo do produto" />
-                <br/>
-                <br/>
-                <p>Código: {produto.codigo}</p>
-                <p>{produto.nome}</p>
-                <p>Descrição: {produto.descricao}</p>
-                <p>Preço: ${produto.preco}</p>
+                    <br/>
+                    <br/>
+                    <p>Código: {produto.codigo}</p>
+                    <p>{produto.nome}</p>
+                    <p>Descrição: {produto.descricao}</p>
+                    <p>Preço: ${produto.preco}</p>
+                    </>)
+                    :
+                    (<>
+                    <p>Lista de Produtos vazia!</p>
+                    <p>Adicione novos produtos.</p>
+                    </>)
+                }
+                
             </S.ProductDetailBox>
             <S.ButtonGroup>
                 <S.ButtonUpdate onClick={iniciarEdicao}>Editar</S.ButtonUpdate>

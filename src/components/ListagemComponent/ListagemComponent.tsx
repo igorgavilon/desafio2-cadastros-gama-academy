@@ -44,7 +44,8 @@ function ListagemComponent(props: ListagemProps) {
                     )
                 })
             }
-        </S.ListContainer>
+            
+        </S.ListContainer>        
     )
 }
 
