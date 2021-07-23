@@ -27,11 +27,13 @@ function DetalhesClienteComponent (props: DetalhesClienteProps) {
                     <img src={require(`../../assets/${cliente.imagem}`).default} 
                     width={90} height={90} alt="logo do cliente" />
                     <br/>
-                    <br/>
-                    <p>Código: {cliente.codigo}</p>
                     <p>{cliente.nome}</p>
+                    <hr/>
+                    <p>Código: {cliente.codigo}</p>
+                    <p>CPF/CNPJ: {cliente.cpf_cnpj}</p>
                     <p>Telefone: {cliente.telefone}</p>
-                    <p>Email: ${cliente.email}</p>
+                    <p>Email: {cliente.email}</p>
+                    <p>Endereço: {cliente.endereco}</p>
                     </>)
                     :
                     (<>

@@ -163,7 +163,7 @@ function ListaDeProdutos() {
                   :  <><ListagemComponent 
                     produtosList={produtos} 
                     atualizar={atualizarDetalhesBox} />
-                    <S.ButtonAdicionar onClick={adicionarProduto}>Novo</S.ButtonAdicionar></>
+                    <S.ButtonAdicionar onClick={adicionarProduto}>+Novo</S.ButtonAdicionar></>
                 }
                 
                 <DetalhesProdutoComponent 

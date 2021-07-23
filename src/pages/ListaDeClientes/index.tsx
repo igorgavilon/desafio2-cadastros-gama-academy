@@ -164,7 +164,7 @@ function ListaDeClientes() {
                   :  <><ListagemClienteComponent 
                     clientesList={clientes} 
                     atualizar={atualizarDetalhesBox} />
-                    <S.ButtonAdicionar onClick={adicionarCliente}>Novo</S.ButtonAdicionar></>
+                    <S.ButtonAdicionar onClick={adicionarCliente}>+Novo</S.ButtonAdicionar></>
                 }
                 
                 <DetalhesClienteComponent 

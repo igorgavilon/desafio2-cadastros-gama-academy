@@ -27,10 +27,11 @@ function DetalhesProdutoComponent (props: DetalhesProdutoProps) {
                     <img src={require(`../../assets/${produto.imagem}`).default} 
                     width={90} height={90} alt="logo do produto" />
                     <br/>
-                    <br/>
-                    <p>Código: {produto.codigo}</p>
                     <p>{produto.nome}</p>
+                    <hr/>
+                    <p>Código: {produto.codigo}</p>
                     <p>Descrição: {produto.descricao}</p>
+                    <p>Estoque: {produto.estoque}</p>
                     <p>Preço: ${produto.preco}</p>
                     </>)
                     :

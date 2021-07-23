@@ -10,7 +10,7 @@ export const DetailsContainer = styled.div`
 `;
 
 export const ProductDetailBox = styled.div`
-    width: 300px;
+    width: 350px;
     height: 400px;
     border: 1px dashed blue;
     border-radius: 5px;
@@ -19,7 +19,8 @@ export const ProductDetailBox = styled.div`
     color: #fff;
     text-align: center;
     padding: 10px 5px;
-    font-size: 1.0rem
+    font-size: 1.0rem;
+    overflow: auto;
 
 `;
 
