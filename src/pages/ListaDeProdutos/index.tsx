@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as S from './styled';
 
 import ListagemComponent from '../../components/ListagemComponent/ListagemComponent';
 import DetalhesProdutoComponent from '../../components/DetalheProdutoBox/DetalhesProdutoComponent';
 import FormProdutoComponent from '../../components/FormDadosProduto/FormProdutoComponent';
 import FormNovoProdutoComponent from '../../components/FormNovoProduto/FormNovoProdutoComponent';
+import BotoesNavegacaoComponent from '../../components/BotoesNavegacao/BotoesNavegacaoComponent';
 
 interface Produto {
     codigo: string;
@@ -70,6 +71,19 @@ function ListaDeProdutos() {
     const [produtoMostrarDetalhe, setProdutoMostrarDetalhe] = useState(produtos[0]);
     const [modoEdicao, setModoEdicao] = useState(false);
     const [modoCriacao, setModoCriacao] = useState(false);
+
+    useEffect(() => {
+        let dadosLocalStorage: string = localStorage.getItem('produtosArray')!;
+        let arrayProdutos: Produto[];
+        if(dadosLocalStorage) {
+            arrayProdutos = JSON.parse(dadosLocalStorage);
+            setProdutos(arrayProdutos);
+        }
+    },[]);
+
+    useEffect(() => {
+       localStorage.setItem('produtosArray', JSON.stringify(produtos));
+    },[produtos]);
     
     const atualizarDetalhesBox = (codigo: string) => {
         if(!modoEdicao) {
@@ -84,8 +98,9 @@ function ListaDeProdutos() {
     }
 
     const salvarCriacao = (produto: Produto) => {
-        produtos.push(produto)
-        setProdutoMostrarDetalhe(produtos[0])
+        //adicionando um objeto no fim do array
+        setProdutos(prevState => [...prevState, produto])
+        setProdutoMostrarDetalhe(produto)
         sairModoCriacao()
 
     }
@@ -108,8 +123,14 @@ function ListaDeProdutos() {
 
 
     const salvarEdicao = (produtoEditado: Produto) => {
-        const index: number = produtos.indexOf(produtoMostrarDetalhe)
-        produtos.splice(index, 1, produtoEditado)
+        const arrayProdutosEditado: Produto[] = produtos.map((produto) => {
+            if(produto.codigo === produtoEditado.codigo) {
+                return produtoEditado
+            } else {
+                return produto
+            }
+        })
+        setProdutos(arrayProdutosEditado)
         setProdutoMostrarDetalhe(produtoEditado)
         sairModoEdicao();
     }
@@ -124,6 +145,7 @@ function ListaDeProdutos() {
 
     return (
         <>
+            <BotoesNavegacaoComponent />
             <S.Title>Sistema de Inventário Produtos</S.Title>
             <S.MainContainer>
                 { modoEdicao ? 

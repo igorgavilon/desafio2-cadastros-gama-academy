@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as S from './styled';
 
 import ListagemClienteComponent from '../../components/ListagemCliente/ListagemClienteComponent';
 import DetalhesClienteComponent from '../../components/DetalheClienteBox/DetalhesClienteComponent';
 import FormClienteComponent from '../../components/FormDadosCliente/FormClienteComponent';
 import FormNovoClienteComponent from '../../components/FormNovoCliente/FormNovoClienteComponent';
+import BotoesNavegacaoComponent from '../../components/BotoesNavegacao/BotoesNavegacaoComponent';
 
 interface Cliente {
     codigo: string;
@@ -15,7 +16,7 @@ interface Cliente {
     email: string;
     imagem: string;
 }
-
+//localStorage.setItem('clientesArray', JSON.stringfy(clientesArray))
 const clientesArray: Cliente[] = [
     {
         codigo: 'CL-001',
@@ -65,12 +66,25 @@ const clientesArray: Cliente[] = [
 ]
 
 function ListaDeClientes() {
-    
+    //const arrayClientes: Array<Cliente> = []
     const [clientes, setClientes] = useState(clientesArray);
     const [clienteMostrarDetalhe, setClienteMostrarDetalhe] = useState(clientes[0]);
     const [modoEdicao, setModoEdicao] = useState(false);
     const [modoCriacao, setModoCriacao] = useState(false);
     
+    useEffect(() => {
+        let dadosLocalStorage: string = localStorage.getItem('clientesArray')!;
+        let arrayClientes: Cliente[];
+        if(dadosLocalStorage !== null) {
+            arrayClientes = JSON.parse(dadosLocalStorage);
+            setClientes(arrayClientes);
+        }
+    },[]);
+
+    useEffect(() => {
+       localStorage.setItem('clientesArray', JSON.stringify(clientes));
+    },[clientes]);
+
     const atualizarDetalhesBox = (codigo: string) => {
         if(!modoEdicao) {
             const clienteEscolhido: Cliente = clientes.find((cliente) => cliente.codigo === codigo)!;
@@ -84,8 +98,9 @@ function ListaDeClientes() {
     }
 
     const salvarCriacao = (cliente: Cliente) => {
-        clientes.push(cliente)
-        setClienteMostrarDetalhe(clientes[0])
+        //adicionando um objeto no fim do array
+        setClientes(prevState => [...prevState, cliente])
+        setClienteMostrarDetalhe(cliente)
         sairModoCriacao()
 
     }
@@ -109,7 +124,14 @@ function ListaDeClientes() {
 
     const salvarEdicao = (clienteEditado: Cliente) => {
         const index: number = clientes.indexOf(clienteMostrarDetalhe)
-        clientes.splice(index, 1, clienteEditado)
+        const arrayClientesEditado: Cliente[] = clientes.map((cliente) => {
+            if(cliente.codigo === clienteEditado.codigo) {
+                return clienteEditado
+            } else {
+                return cliente
+            }
+        })
+        setClientes(arrayClientesEditado)
         setClienteMostrarDetalhe(clienteEditado)
         sairModoEdicao();
     }
@@ -124,6 +146,7 @@ function ListaDeClientes() {
 
     return (
         <>
+            <BotoesNavegacaoComponent />
             <S.Title>Sistema de Inventário Clientes</S.Title>
             <S.MainContainer>
                 { modoEdicao ? 
